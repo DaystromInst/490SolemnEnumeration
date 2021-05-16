@@ -31,8 +31,15 @@ def mapChans():
         channel_map.update({nom: chans})
 
 
-def checkWord(msg: str):
-    msgList = msg
+def checkWord(msg: str, author):
+    msgStr = msg.split()
+
+    for word in msgStr:
+        word = word.lower()
+        for slur in banned_words:
+            if word == slur:
+                print('UNACCEPTABLE')
+                # Do punishment stuff in here
 
 
 @client.event
@@ -41,9 +48,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content.startswith('!hello'):
-        msg = 'Hello {0.author.mention}'.format(message)
-        # await client.send_message(message.channel, msg)
+    checkWord(message.content.lower(), message.author)  # probe for slurs
 
 
 @client.event
@@ -56,9 +61,11 @@ async def on_ready():
 
     for serv in server:
         key = serv.name
+        greet2 = 'Greetings! I am 490 Solemn Enumeration!\n' + "I am the monitor of installation \""+key+"\"!"
+
         chans = channel_map[key]
         target = chans[0]
-        await target.send(greet)
+        await target.send(greet2)
 
 
 client.run(TOKEN)
