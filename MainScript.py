@@ -13,10 +13,22 @@ server = client.guilds
 channel_map = {}
 
 # Things to think about: I feel uncomfy writing the banned slurs into the repo even though it's private/used to ban them
-
 # Until then I guess I'll need to suck it up and hard code the no-nos
 # May god have mercy on my soul
 banned_words = ["nigger", "chink", "kike", "wetback", "spic"]
+
+
+def roleCheck(place):
+    found = False
+    roles = place.roles()
+    for spot in roles:
+        if spot.name == "Cryptum":
+            found = True
+            break
+
+    if not found:
+        perms = discord.Permissions(send_messages=False,stream=False,change_nickname=False,administrator=False)
+        await place.create_role("Cryptum", perms, reason="Such conduct is simply unacceptable. Protocol dictates I apprehend and assign this restraint to those who misbehave.")
 
 
 def mapChans():
@@ -40,6 +52,12 @@ def checkWord(msg: str, author):
             if word == slur:
                 print('UNACCEPTABLE')
                 # Do punishment stuff in here
+                # What do for pyunishmunchen?
+                # Perhaps track strikes in JSON dict
+                # Create jail role and store the time of the strike in the JSON
+                # 3 strikes and kick. Simple as.
+                # Stikes can expire. Once time served, remove jail role.
+                # Maybe remember the user on kick. If they return, ban instead of kick
 
 
 @client.event
@@ -66,6 +84,8 @@ async def on_ready():
         chans = channel_map[key]
         target = chans[0]
         await target.send(greet2)
+
+        roleCheck(serv)
 
 
 client.run(TOKEN)
