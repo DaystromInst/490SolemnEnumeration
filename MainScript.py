@@ -20,7 +20,7 @@ banned_words = ["nigger", "chink", "kike", "wetback", "spic"]
 
 def roleCheck(place):
     found = False
-    roles = place.roles()
+    roles = place.roles
     for spot in roles:
         if spot.name == "Cryptum":
             found = True
@@ -28,7 +28,7 @@ def roleCheck(place):
 
     if not found:
         perms = discord.Permissions(send_messages=False,stream=False,change_nickname=False,administrator=False)
-        await place.create_role("Cryptum", perms, reason="Such conduct is simply unacceptable. Protocol dictates I apprehend and assign this restraint to those who misbehave.")
+        await place.create_role("Cryptum", perms, reason="Protocol dictates I apprehend and assign this restraint to those who misbehave.")
 
 
 def mapChans():
@@ -43,21 +43,40 @@ def mapChans():
         channel_map.update({nom: chans})
 
 
-def checkWord(msg: str, author):
+def checkWord(msg: str, author, serv):
     msgStr = msg.split()
+    found = False
 
     for word in msgStr:
         word = word.lower()
         for slur in banned_words:
             if word == slur:
                 print('UNACCEPTABLE')
-                # Do punishment stuff in here
-                # What do for pyunishmunchen?
-                # Perhaps track strikes in JSON dict
-                # Create jail role and store the time of the strike in the JSON
-                # 3 strikes and kick. Simple as.
-                # Stikes can expire. Once time served, remove jail role.
-                # Maybe remember the user on kick. If they return, ban instead of kick
+                found = True
+                break
+        if found:
+            break
+
+    # Do punishment stuff in here
+    if found:
+        roleCall = author.roles
+
+        for thing in roleCall:
+            await author.remove_roles(thing)
+
+        roleCall = await serv.fetch_roles()
+
+        for thing in roleCall:
+            if thing.name == "Cryptum":
+                await author.add_roles(thing, "Protocol dictates action!")
+                break
+
+    # What do for pyunishmunchen?
+    # Perhaps track strikes in JSON dict
+    # Create jail role and store the time of the strike in the JSON
+    # 3 strikes and kick. Simple as.
+    # Stikes can expire. Once time served, remove jail role.
+    # Maybe remember the user on kick. If they return, ban instead of kick
 
 
 @client.event
@@ -66,7 +85,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    checkWord(message.content.lower(), message.author)  # probe for slurs
+    checkWord(message.content.lower(), message.author, message.guild)  # probe for slurs
 
 
 @client.event
