@@ -3,19 +3,21 @@
 # kill me
 
 import discord
+from discord.ext import commands
 import asyncio
 import tokens
 
 TOKEN = tokens.token
 
-client = discord.Client()
+#client = discord.Client()
+client = commands.Bot(command_prefix='~')
 server = client.guilds
 channel_map = {}
 
 # Things to think about: I feel uncomfy writing the banned slurs into the repo even though it's private/used to ban them
 # Until then I guess I'll need to suck it up and hard code the no-nos
 # May god have mercy on my soul
-banned_words = ["test1"]
+banned_words = ["test1", "test2"]
 
 
 async def roleCheck(place):
@@ -62,6 +64,22 @@ def checkWord(msg: str):
     # 3 strikes and kick. Simple as.
     # Stikes can expire. Once time served, remove jail role.
     # Maybe remember the user on kick. If they return, ban instead of kick
+
+
+@client.command(pass_context=True)
+async def hello(ctx):
+    channel = ctx.message.channel
+    greet = "Greetings! I am 490 Solemn Enumeration! I am the monitor of "+str(ctx.guild.name)
+
+    await channel.send(greet)
+
+
+@client.command(pass_context=True)
+@commands.is_owner()
+async def leave(ctx):
+    print("closing down")
+    await client.close()
+    await client.logout()
 
 
 @client.event
