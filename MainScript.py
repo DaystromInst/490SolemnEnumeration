@@ -10,12 +10,12 @@ TOKEN = tokens.token
 
 client = discord.Client()
 server = client.guilds
-channel_map = {}
+channel_map = {str: []}
 
 # Things to think about: I feel uncomfy writing the banned slurs into the repo even though it's private/used to ban them
 # Until then I guess I'll need to suck it up and hard code the no-nos
 # May god have mercy on my soul
-banned_words = [""]
+banned_words = ["test1"]
 
 
 def roleCheck(place):
@@ -88,6 +88,7 @@ async def on_message(message):
         return
 
     checkWord(message.content.lower(), message.author, message.guild)  # probe for slurs
+    await message.delete()
 
 
 @client.event
@@ -99,15 +100,15 @@ async def on_ready():
     greet = 'Greetings! I am 490 Solemn Enumeration!\n'+"I am the monitor of this installation!"
     print(greet)
 
-    for serv in server:
-        key = serv.name
-        greet2 = 'Greetings! I am 490 Solemn Enumeration!\n' + "I am the monitor of installation \""+key+"\"!"
-
-        chans = channel_map[key]
-        target = chans[0]
-        await target.send(greet2)
-
-        roleCheck(serv)
+    # for serv in server:
+    #     key = serv.name
+    #     greet2 = 'Greetings! I am 490 Solemn Enumeration!\n' + "I am the monitor of installation \""+key+"\"!"
+    #
+    #     chans = channel_map[key]
+    #     target = chans[0]
+    #     await target.send(greet2)
+    #
+    #     roleCheck(serv)
 
 
 client.run(TOKEN)
