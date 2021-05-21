@@ -31,7 +31,7 @@ async def roleCheck(place):
         await place.create_role("Cryptum", perms, reason="Protocol dictates I apprehend and assign this restraint to those who misbehave.")
 
 
-async def mapChans():
+def mapChans():
     global channel_map
     global client
 
@@ -43,33 +43,18 @@ async def mapChans():
         channel_map.update({nom: chans})
 
 
-async def checkWord(msg: str, author, serv):
+def checkWord(msg: str):
+    global banned_words
     msgStr = msg.split()
-    found = False
 
     for word in msgStr:
         word = word.lower()
         for slur in banned_words:
             if word == slur:
                 print('UNACCEPTABLE')
-                found = True
-                break
-        if found:
-            break
+                return True
 
-    # Do punishment stuff in here
-    if found:
-        roleCall = author.roles
-
-        for thing in roleCall:
-            await author.remove_roles(thing)
-
-        roleCall = await serv.fetch_roles()
-
-        for thing in roleCall:
-            if thing.name == "Cryptum":
-                await author.add_roles(thing, "Protocol dictates action!")
-                break
+    return False
 
     # What do for pyunishmunchen?
     # Perhaps track strikes in JSON dict
@@ -85,28 +70,30 @@ async def on_message(message):
     if message.author == client.user:
         print("message detected")
         return
+    else:
+        print("Message detected. Authored by a Reclaimer!")
 
-    await checkWord(message.content.lower(), message.author, message.guild)  # probe for slurs
+    if checkWord(message.content.lower()):  # probe for slurs
+        print("checkWord returned true")
+        # kick message author
 
 
 @client.event
 async def on_ready():
     global server
     global channel_map
-    await mapChans()
+    mapChans()
 
     greet = 'Greetings! I am 490 Solemn Enumeration!\n'+"I am the monitor of this installation!"
     print(greet)
 
     for serv in server:
         key = serv.name
-        greet2 = 'Greetings! I am 490 Solemn Enumeration!\n' + "I am the monitor of installation \""+key+"\"!"
+        greet2 = 'Greetings! I am 490 Solemn Enumeration!\n' + "I am the monitor of installation "+key+"!"
 
         chans = channel_map[key]
         target = chans[0]
         await target.send(greet2)
-
-        await roleCheck(serv)
 
 
 client.run(TOKEN)
