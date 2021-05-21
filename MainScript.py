@@ -78,19 +78,26 @@ async def on_message(message):
             return
         elif cont.startswith("~leave"):
             # Add perms check - we don't want smart asses shutting it down for a laugh
+            perms = message.author.guild_permissions
+
+            if not perms.administrator:
+                print("not an admin")
+                return
+
             await client.close()
             await client.logout()
 
     if checkWord(message.content.lower()):  # probe for slurs
         print("checkWord returned true")
         # kick message author
+        await message.author.kick(reason="Protocol dictates action! Such behavior is unacceptable!")
 
 
 @client.event
 async def on_ready():
     global server
     global channel_map
-    mapChans()
+    #mapChans()
 
     greet = 'Greetings! I am 490 Solemn Enumeration!\n'+"I am the monitor of this installation!"
     print(greet)
