@@ -102,13 +102,13 @@ async def on_ready():
     greet = 'Greetings! I am 490 Solemn Enumeration!\n'+"I am the monitor of this installation!"
     print(greet)
 
-    for serv in server:
-        key = serv.name
-        greet2 = 'Greetings! I am 490 Solemn Enumeration!\n' + "I am the monitor of installation "+key+"!"
-
-        chans = channel_map[key]
-        target = chans[0]
-        await target.send(greet2)
+    # for serv in server:
+    #     key = serv.name
+    #     greet2 = 'Greetings! I am 490 Solemn Enumeration!\n' + "I am the monitor of installation "+key+"!"
+    #
+    #     chans = channel_map[key]
+    #     target = chans[0]
+    #     await target.send(greet2)
 
 
 client.run(TOKEN)
