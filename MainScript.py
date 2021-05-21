@@ -15,7 +15,7 @@ channel_map = {}
 # Things to think about: I feel uncomfy writing the banned slurs into the repo even though it's private/used to ban them
 # Until then I guess I'll need to suck it up and hard code the no-nos
 # May god have mercy on my soul
-banned_words = ["test1", "test2"]
+banned_words = tokens.banned
 
 
 async def roleCheck(place):
@@ -92,7 +92,7 @@ async def on_message(message):
         # kick message author
         await message.channel.send("Protocol dictates action! Such behavior is unacceptable!")
         await message.delete()
-        #await message.author.kick(reason="Protocol dictates action! Such behavior is unacceptable!")
+        await message.author.kick(reason="Protocol dictates action! Such behavior is unacceptable!")
 
 
 @client.event
