@@ -90,13 +90,15 @@ async def on_message(message):
     if checkWord(message.content.lower()):  # probe for slurs
         print("checkWord returned true")
         # kick message author
-        await message.author.kick(reason="Protocol dictates action! Such behavior is unacceptable!")
+        await message.channel.send("Protocol dictates action! Such behavior is unacceptable!")
+        await message.delete()
+        #await message.author.kick(reason="Protocol dictates action! Such behavior is unacceptable!")
 
 
 @client.event
 async def on_ready():
-    global server
-    global channel_map
+    #global server
+    #global channel_map
     #mapChans()
 
     greet = 'Greetings! I am 490 Solemn Enumeration!\n'+"I am the monitor of this installation!"
