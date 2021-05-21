@@ -18,7 +18,7 @@ channel_map = {}
 banned_words = [""]
 
 
-async def roleCheck(place):
+def roleCheck(place):
     found = False
     roles = place.roles
     for spot in roles:
@@ -31,7 +31,7 @@ async def roleCheck(place):
         await place.create_role("Cryptum", perms, reason="Protocol dictates I apprehend and assign this restraint to those who misbehave.")
 
 
-async def mapChans():
+def mapChans():
     global channel_map
     global client
 
@@ -43,7 +43,8 @@ async def mapChans():
         channel_map.update({nom: chans})
 
 
-async def checkWord(msg: str, author, serv):
+def checkWord(msg: str, author, serv):
+    global banned_words
     msgStr = msg.split()
     found = False
 
@@ -86,14 +87,14 @@ async def on_message(message):
         print("message detected")
         return
 
-    await checkWord(message.content.lower(), message.author, message.guild)  # probe for slurs
+    checkWord(message.content.lower(), message.author, message.guild)  # probe for slurs
 
 
 @client.event
 async def on_ready():
     global server
     global channel_map
-    await mapChans()
+    mapChans()
 
     greet = 'Greetings! I am 490 Solemn Enumeration!\n'+"I am the monitor of this installation!"
     print(greet)
@@ -106,7 +107,7 @@ async def on_ready():
         target = chans[0]
         await target.send(greet2)
 
-        await roleCheck(serv)
+        roleCheck(serv)
 
 
 client.run(TOKEN)
