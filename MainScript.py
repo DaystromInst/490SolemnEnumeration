@@ -15,7 +15,7 @@ channel_map = {}
 # Things to think about: I feel uncomfy writing the banned slurs into the repo even though it's private/used to ban them
 # Until then I guess I'll need to suck it up and hard code the no-nos
 # May god have mercy on my soul
-banned_words = [""]
+banned_words = ["test1", "test2"]
 
 
 async def roleCheck(place):
@@ -77,6 +77,7 @@ async def on_message(message):
             await message.channel.send("Greetings! I am 490 Solemn Enumeration! I am the monitor of installation "+message.guild.name)
             return
         elif cont.startswith("~leave"):
+            # Add perms check - we don't want smart asses shutting it down for a laugh
             await client.close()
             await client.logout()
 
