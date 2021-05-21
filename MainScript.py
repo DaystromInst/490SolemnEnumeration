@@ -3,21 +3,19 @@
 # kill me
 
 import discord
-from discord.ext import commands
 import asyncio
 import tokens
 
 TOKEN = tokens.token
 
-#client = discord.Client()
-client = commands.Bot(command_prefix='~')
+client = discord.Client()
 server = client.guilds
 channel_map = {}
 
 # Things to think about: I feel uncomfy writing the banned slurs into the repo even though it's private/used to ban them
 # Until then I guess I'll need to suck it up and hard code the no-nos
 # May god have mercy on my soul
-banned_words = ["test1", "test2"]
+banned_words = [""]
 
 
 async def roleCheck(place):
@@ -66,22 +64,6 @@ def checkWord(msg: str):
     # Maybe remember the user on kick. If they return, ban instead of kick
 
 
-@client.command(pass_context=True)
-async def hello(ctx):
-    channel = ctx.message.channel
-    greet = "Greetings! I am 490 Solemn Enumeration! I am the monitor of "+str(ctx.guild.name)
-
-    await channel.send(greet)
-
-
-@client.command(pass_context=True)
-@commands.is_owner()
-async def leave(ctx):
-    print("closing down")
-    await client.close()
-    await client.logout()
-
-
 @client.event
 async def on_message(message):
     # we do not want the bot to reply to itself
@@ -90,6 +72,13 @@ async def on_message(message):
         return
     else:
         print("Message detected. Authored by a Reclaimer!")
+        cont = message.content.lower()
+        if cont.startswith("~hello"):
+            await message.channel.send("Greetings! I am 490 Solemn Enumeration! I am the monitor of installation "+message.guild.name)
+            return
+        elif cont.startswith("~leave"):
+            await client.close()
+            await client.logout()
 
     if checkWord(message.content.lower()):  # probe for slurs
         print("checkWord returned true")
@@ -105,13 +94,13 @@ async def on_ready():
     greet = 'Greetings! I am 490 Solemn Enumeration!\n'+"I am the monitor of this installation!"
     print(greet)
 
-    # for serv in server:
-    #     key = serv.name
-    #     greet2 = 'Greetings! I am 490 Solemn Enumeration!\n' + "I am the monitor of installation "+key+"!"
-    #
-    #     chans = channel_map[key]
-    #     target = chans[0]
-    #     await target.send(greet2)
+    for serv in server:
+        key = serv.name
+        greet2 = 'Greetings! I am 490 Solemn Enumeration!\n' + "I am the monitor of installation "+key+"!"
+
+        chans = channel_map[key]
+        target = chans[0]
+        await target.send(greet2)
 
 
 client.run(TOKEN)
