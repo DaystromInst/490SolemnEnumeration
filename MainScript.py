@@ -15,10 +15,10 @@ channel_map = {}
 # Things to think about: I feel uncomfy writing the banned slurs into the repo even though it's private/used to ban them
 # Until then I guess I'll need to suck it up and hard code the no-nos
 # May god have mercy on my soul
-banned_words = ["nigger", "chink", "kike", "wetback", "spic"]
+banned_words = [""]
 
 
-def roleCheck(place):
+async def roleCheck(place):
     found = False
     roles = place.roles
     for spot in roles:
@@ -31,7 +31,7 @@ def roleCheck(place):
         await place.create_role("Cryptum", perms, reason="Protocol dictates I apprehend and assign this restraint to those who misbehave.")
 
 
-def mapChans():
+async def mapChans():
     global channel_map
     global client
 
@@ -43,7 +43,7 @@ def mapChans():
         channel_map.update({nom: chans})
 
 
-def checkWord(msg: str, author, serv):
+async def checkWord(msg: str, author, serv):
     msgStr = msg.split()
     found = False
 
@@ -83,15 +83,17 @@ def checkWord(msg: str, author, serv):
 async def on_message(message):
     # we do not want the bot to reply to itself
     if message.author == client.user:
+        print("message detected")
         return
 
-    checkWord(message.content.lower(), message.author, message.guild)  # probe for slurs
+    await checkWord(message.content.lower(), message.author, message.guild)  # probe for slurs
 
 
 @client.event
 async def on_ready():
     global server
     global channel_map
+    await mapChans()
 
     greet = 'Greetings! I am 490 Solemn Enumeration!\n'+"I am the monitor of this installation!"
     print(greet)
@@ -104,7 +106,7 @@ async def on_ready():
         target = chans[0]
         await target.send(greet2)
 
-        roleCheck(serv)
+        await roleCheck(serv)
 
 
 client.run(TOKEN)
