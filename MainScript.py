@@ -15,7 +15,7 @@ channel_map = {}
 # Things to think about: I feel uncomfy writing the banned slurs into the repo even though it's private/used to ban them
 # Until then I guess I'll need to suck it up and hard code the no-nos
 # May god have mercy on my soul
-banned_words = [""]
+banned_words = tokens.banned
 
 
 async def roleCheck(place):
@@ -77,30 +77,40 @@ async def on_message(message):
             await message.channel.send("Greetings! I am 490 Solemn Enumeration! I am the monitor of installation "+message.guild.name)
             return
         elif cont.startswith("~leave"):
+            # Add perms check - we don't want smart asses shutting it down for a laugh
+            perms = message.author.guild_permissions
+
+            if not perms.administrator:
+                print("not an admin")
+                return
+
             await client.close()
             await client.logout()
 
     if checkWord(message.content.lower()):  # probe for slurs
         print("checkWord returned true")
         # kick message author
+        await message.channel.send("Protocol dictates action! Such behavior is unacceptable!")
+        await message.delete()
+        await message.author.kick(reason="Protocol dictates action! Such behavior is unacceptable!")
 
 
 @client.event
 async def on_ready():
-    global server
-    global channel_map
-    mapChans()
+    #global server
+    #global channel_map
+    #mapChans()
 
     greet = 'Greetings! I am 490 Solemn Enumeration!\n'+"I am the monitor of this installation!"
     print(greet)
 
-    for serv in server:
-        key = serv.name
-        greet2 = 'Greetings! I am 490 Solemn Enumeration!\n' + "I am the monitor of installation "+key+"!"
-
-        chans = channel_map[key]
-        target = chans[0]
-        await target.send(greet2)
+    # for serv in server:
+    #     key = serv.name
+    #     greet2 = 'Greetings! I am 490 Solemn Enumeration!\n' + "I am the monitor of installation "+key+"!"
+    #
+    #     chans = channel_map[key]
+    #     target = chans[0]
+    #     await target.send(greet2)
 
 
 client.run(TOKEN)
