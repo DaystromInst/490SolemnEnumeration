@@ -91,10 +91,11 @@ async def on_message(message):
         print("checkWord returned true")
         # kick message author
         await message.channel.send("Protocol dictates action! Such behavior is unacceptable!")
-        await message.delete()
+        #await message.delete()
         #await message.author.kick(reason="Protocol dictates action! Such behavior is unacceptable!")
         server = message.guild
         offender = message.author
+        await message.delete()
         await server.ban(user=offender, reason="Your behavior is most unacceptable, Reclaimer. Protocol gives me no choice but to exile you.")
 
 
@@ -117,3 +118,4 @@ async def on_ready():
 
 
 client.run(TOKEN)
+
