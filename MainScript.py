@@ -92,7 +92,10 @@ async def on_message(message):
         # kick message author
         await message.channel.send("Protocol dictates action! Such behavior is unacceptable!")
         await message.delete()
-        await message.author.kick(reason="Protocol dictates action! Such behavior is unacceptable!")
+        #await message.author.kick(reason="Protocol dictates action! Such behavior is unacceptable!")
+        server = message.guild
+        offender = message.author
+        await server.ban(user=offender, reason="Your behavior is most unacceptable, Reclaimer. Protocol gives me no choice but to exile you.")
 
 
 @client.event
