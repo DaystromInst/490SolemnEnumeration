@@ -1,6 +1,6 @@
 # 490 Solemn Enumeration
 ## Description
-Greetings! I am 490 Solemn Enumeration! I am a construct designed to monitor and administrate your communication platform!
+Greetings! I am 490 Solemn Enumeration! I am a construct designed to monitor and administrate your Discord communications!
 
 ## Features
 ### Current functionality
@@ -13,3 +13,4 @@ Greetings! I am 490 Solemn Enumeration! I am a construct designed to monitor and
 - Recite rules
 
 ## Setup
+This bot uses an unversioned python file called **tokens** to both store the client token and the list of banned words.
